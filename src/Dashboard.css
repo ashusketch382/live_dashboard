@@ -1,0 +1,115 @@
+/* General styles */
+.table-container {
+    max-width: 100%;
+    overflow-x: auto; /* Add horizontal scrolling for small screens */
+    padding: 1rem;
+}
+  
+/* Table styling */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0 auto; /* Center the table */
+    font-family: Arial, sans-serif;
+    font-size: 0.9rem;
+    text-align: center;
+    min-width: 800px; /* Ensure minimum width */
+}
+  
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center; /* Center text horizontally */
+    vertical-align: middle; /* Center text vertically */
+    word-wrap: break-word; /* Wrap text if it's too long */
+    word-break: break-word;
+    white-space: normal; /* Allow text to wrap */
+}
+  
+/* Header styling */
+th {
+    background-color: #dfe6fb;
+    font-weight: bold;
+    text-align: center;
+}
+  
+/* Row hover effect */
+tr:hover {
+    background-color: #f8e8e8 !important;
+}
+  
+/* Dynamic status colors */
+.status-blue {
+    background-color: #0c4ff9; /* blue */
+    color: #fff;
+}
+  
+.status-red {
+    background-color: #fa2626; /* red */
+    color: #fff;
+}
+  
+.status-green {
+    background-color: #10af10; /* green */
+    color: #000;
+}
+  
+.status-yellow {
+    background-color: #f8f8a3; /* yellow */
+    color: #000;
+}
+
+
+/* Odd rows color */
+tbody tr:nth-child(odd) {
+    background-color: #f5f5f5; /* Light gray for odd rows */
+    color: #000; /* Black text */
+  }
+  
+/* Even rows color */
+tbody tr:nth-child(even) {
+    background-color: #e3ecfa; /* White for even rows */
+    color: #000; /* Black text */
+}
+
+/* Column width adjustments */
+th:first-child,
+td:first-child, /* First column: Name */
+th:nth-child(2),
+td:nth-child(2){
+    width: 15%;
+} /* Second column: Content */
+
+th:nth-child(3),
+td:nth-child(3), /* Third column: On-Prem Status */
+th:nth-child(4),
+td:nth-child(4), /* Fourth column: Docker Status */
+th:nth-child(5),
+td:nth-child(5) { /* Fifth column: Build Start Time */
+    width: 10%; /* Allocate 10% width for these columns */
+}
+  
+th:nth-child(6),
+td:nth-child(6) {
+    width: auto; /* Let Comments column take up remaining space */
+}
+
+/* Center-align text in all cells */
+th,
+td {
+    text-align: center; /* Center text horizontally */
+    vertical-align: middle; /* Center text vertically */
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+    table {
+        font-size: 0.8rem;
+    }
+  
+    th,
+    td {
+        padding: 6px;
+    }
+}
