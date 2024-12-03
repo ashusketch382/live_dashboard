@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
 import './Dashboard.css'
 const Dashboard = () => {
     const socketRef = useRef(null);
@@ -8,10 +9,9 @@ const Dashboard = () => {
     // Fetch all rows on initial load
     async function populateData(){
         try {
-            const response = await fetch('http://localhost:3000/allBuild');
-            const json = await response.json();
-            console.log(json.data);
-            setBuilds(json.data);   
+            const response = await axios.get('http://localhost:3000/allBuild');
+            console.log(response.data.data);
+            setBuilds(response.data.data);   
         } catch (error) {
             console.error('Error fetching initial data:', error);
         }
