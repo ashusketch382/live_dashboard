@@ -9,7 +9,7 @@ const Dashboard = () => {
     // Fetch all rows on initial load
     async function populateData(){
         try {
-            const response = await axios.get('http://localhost:3000/allBuild');
+            const response = await axios.get('http://10.14.82.102:3000/allBuild');
             console.log(response.data.data);
             setBuilds(response.data.data);   
         } catch (error) {
@@ -19,7 +19,7 @@ const Dashboard = () => {
     populateData();
 
     // Setup WebSocket connection
-    socketRef.current = new WebSocket('ws://localhost:3000');
+    socketRef.current = new WebSocket('ws://10.14.82.102:3000');
     socketRef.current.onopen = () =>{
         console.log('Connection established');
     }
