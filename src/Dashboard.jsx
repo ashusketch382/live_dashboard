@@ -1,5 +1,3 @@
-import './App.css';
-import bold from "./assets/bold_header.png"
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './Dashboard.css'
@@ -97,7 +95,6 @@ const Dashboard = () => {
 
   return (
     <div style={{ margin: "20px", overflowX: "auto" }}>
-      <img src={bold} alt="BOLD LIVE DASHBOARD" className="responsive-logo"></img>
       <table>
 
         {/* 102 / 10.2 Builds */}
