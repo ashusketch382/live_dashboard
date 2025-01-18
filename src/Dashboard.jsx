@@ -71,6 +71,28 @@ const Dashboard = () => {
     }
   };
 
+  const createJiraLinks = (text) => {
+    if (!text) return text;
+    const regex = /(WA-\d{6})/g; // Matches WA- followed by 6 digits
+    return text.split(regex).map((part, index) => {
+        if (regex.test(part)) {
+            const jiraUrl = `https://hclsw-jiracentral.atlassian.net/browse/${part}`;
+            return (
+                <a
+                    key={index}
+                    href={jiraUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'blue', textDecoration: 'underline' }}
+                >
+                    {part}
+                </a>
+            );
+        }
+        return part;
+    });
+};
+
   const maestroBuilds = builds.filter((build) => {
     const name = build.name.toLowerCase();
     return (
@@ -116,7 +138,7 @@ const Dashboard = () => {
               <td>{new Date(build.buildStartTime).toLocaleString()}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
-              <td>{build.comments}</td>
+              <td>{createJiraLinks(build.comments)}</td>
             </tr>
           ))}
         </tbody>
@@ -146,7 +168,7 @@ const Dashboard = () => {
               <td>{new Date(build.buildStartTime).toLocaleString()}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
-              <td>{build.comments}</td>
+              <td>{createJiraLinks(build.comments)}</td>
             </tr>
           ))}
         </tbody>
@@ -176,7 +198,7 @@ const Dashboard = () => {
               <td>{new Date(build.buildStartTime).toLocaleString()}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
-              <td>{build.comments}</td>
+              <td>{createJiraLinks(build.comments)}</td>
             </tr>
           ))}
         </tbody>
