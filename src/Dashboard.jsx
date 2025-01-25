@@ -108,11 +108,11 @@ const Dashboard = () => {
     const name = build.name.toLowerCase();
     const isTenTwo = name.includes("10.2") || /\bstable_dev\b/.test(name) || name.includes("plugins");
     
-    const isUncategorized = 
-        !maestroBuilds.some((maestroBuild) => maestroBuild.id === build.id) &&
-        !l3Builds.some((l3Build) => l3Build.id === build.id);
-        
-    return isTenTwo || isUncategorized;
+    const isAlreadyCategorized =
+      maestroBuilds.some((maestroBuild) => maestroBuild.id === build.id) ||
+      l3Builds.some((l3Build) => l3Build.id === build.id);
+
+    return isTenTwo && !isAlreadyCategorized;
 });
 
   return (
