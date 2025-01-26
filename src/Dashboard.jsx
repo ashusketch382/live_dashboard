@@ -124,7 +124,7 @@ const Dashboard = () => {
           <tr>
             <th>10.2.X BUILDS (code branch)</th>
             <th>Contents</th>
-            <th>Build Start Time(CEST Zone)</th>
+            <th>Build Start Time</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
