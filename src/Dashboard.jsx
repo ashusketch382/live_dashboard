@@ -122,7 +122,7 @@ const Dashboard = () => {
         {/* 102 / 10.2 Builds */}
         <thead>
           <tr>
-            <th>10.2.X BUILDS (code branch)</th>
+            <th>10.2.4 BUILDS (code branch)</th>
             <th>Contents</th>
             <th>Build Start Time</th>
             <th>On-Prem Status</th>
@@ -133,7 +133,7 @@ const Dashboard = () => {
         <tbody>
           {tenTwoBuilds.map((build) => (
             <tr key={build.id}>
-              <td>{build.name}</td>
+              <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
               <td>{new Date(build.buildStartTime).toLocaleString()}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
@@ -154,7 +154,7 @@ const Dashboard = () => {
         <tr>
             <th>L3 BUILDS (code branch)</th>
             <th>Contents</th>
-            <th>Build Start Time(CEST Zone)</th>
+            <th>Build Start Time</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -163,7 +163,7 @@ const Dashboard = () => {
         <tbody>
           {l3Builds.map((build) => (
             <tr key={build.id}>
-              <td>{build.name}</td>
+              <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
               <td>{new Date(build.buildStartTime).toLocaleString()}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
@@ -184,7 +184,7 @@ const Dashboard = () => {
           <tr>
             <th>Maestro Builds</th>
             <th>Contents</th>
-            <th>Build Start Time(CEST Zone)</th>
+            <th>Build Start Time</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -193,7 +193,7 @@ const Dashboard = () => {
         <tbody>
           {maestroBuilds.map((build) => (
             <tr key={build.id}>
-              <td>{build.name}</td>
+              <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
               <td>{new Date(build.buildStartTime).toLocaleString()}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
@@ -204,6 +204,8 @@ const Dashboard = () => {
         </tbody>
 
       </table>
+      <br></br>
+      <h4>Note: And here is some info about harbor tags and nfs paths for builds And sharing some paths for old/released packages/versions in the <a href='https://hclo365-my.sharepoint.com/:x:/r/personal/ashutoshsi_hcl_com1/_layouts/15/doc2.aspx?sourcedoc=%7BD1501DDE-ADAE-47E6-B61C-983731460A22%7D&file=Book.xlsx&action=editnew&mobileredirect=true&wdNewAndOpenCt=1695649194272&ct=1695649195167&wdPreviousSession=9632b2ad-526d-43a4-99df-9c2055c2c796&wdOrigin=OFFICECOM-WEB.START.NEW&cid=db85782f-0f36-40d5-a68f-2fcc722ce739&wdPreviousSessionSrc=HarmonyWeb' target='_blank'>NFS PATHS EXCEL</a></h4>
     </div>
   );
 };

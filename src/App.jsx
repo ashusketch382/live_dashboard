@@ -19,7 +19,10 @@ function App() {
   </header>
   <Dashboard></Dashboard>
   <footer style={{ textAlign: 'center', marginTop: '50px', fontSize: '16px', color: '#000000', fontFamily: '"Segoe UI Emoji", sans-serif' }}>
+      <br></br>
       Made with <span style={{ color: 'red' }}>❤️</span> by Build Team
+      <br></br>
+      For any feedback, pelase reach out to hwa_buildteam@hcl-software.com
     </footer>
   </>)
 }
