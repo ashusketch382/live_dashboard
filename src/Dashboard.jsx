@@ -45,7 +45,7 @@ const Dashboard = () => {
                     reconnectInterval.current = setInterval(() => {
                         console.log('Reconnecting WebSocket...');
                         connectWebSocket();
-                    }, 5000);
+                    }, 1);
                 }
             }
         };
