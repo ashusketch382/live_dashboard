@@ -1,119 +1,143 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import './Dashboard.css'
+
 const Dashboard = () => {
     const socketRef = useRef(null);
     const [builds, setBuilds] = useState([]);
+    const reconnectInterval = useRef(null);
 
-  useEffect(() => {
-    // Fetch all rows on initial load
-    async function populateData(){
-        try {
-            const response = await axios.get('http://10.14.82.102:80/allBuild');
-            console.log(response.data.data);
-            setBuilds(response.data.data);   
-        } catch (error) {
-            console.error('Error fetching initial data:', error);
+    const connectWebSocket = () => {
+        if (socketRef.current) {
+            socketRef.current.close(); // Ensure no duplicate connection
         }
-    }
-    populateData();
 
-    // Setup WebSocket connection
-    socketRef.current = new WebSocket('ws://10.14.82.102:80');
-    socketRef.current.onopen = () =>{
-        console.log('Connection established');
-    }
-    socketRef.current.onmessage = (event) => {
-        console.log('Message received:', event.data);
-        const updatedBuild = JSON.parse(event.data);
-        console.log(updatedBuild);
-      setBuilds((prevBuilds) => {
-        const index = prevBuilds.findIndex((b) => b.id === updatedBuild.id);
-        if (index !== -1) {
-          const newBuilds = [...prevBuilds];
-          newBuilds[index] = updatedBuild;
-          return newBuilds;
-        }
-        return [...prevBuilds, updatedBuild];
-      });
+        socketRef.current = new WebSocket('ws://10.14.82.102:80');
+
+        socketRef.current.onopen = () => {
+            console.log('WebSocket connection established');
+            clearInterval(reconnectInterval.current); // Stop reconnecting if successful
+        };
+
+        socketRef.current.onmessage = (event) => {
+            console.log('Message received:', event.data);
+            const updatedBuild = JSON.parse(event.data);
+            setBuilds((prevBuilds) => {
+                const index = prevBuilds.findIndex((b) => b.id === updatedBuild.id);
+                if (index !== -1) {
+                    const newBuilds = [...prevBuilds];
+                    newBuilds[index] = updatedBuild;
+                    return newBuilds;
+                }
+                return [...prevBuilds, updatedBuild];
+            });
+        };
+
+        socketRef.current.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        socketRef.current.onclose = (event) => {
+            console.warn('WebSocket closed:', event);
+
+            if (!event.wasClean) {
+                console.log('Attempting to reconnect WebSocket in 5 seconds...');
+                if (!reconnectInterval.current) {
+                    reconnectInterval.current = setInterval(() => {
+                        console.log('Reconnecting WebSocket...');
+                        connectWebSocket();
+                    }, 5000);
+                }
+            }
+        };
     };
 
-    socketRef.current.onerror = (error) => {
-        console.error('WebSocket error:', error);
-      };
-    socketRef.current.onclose = (event) => {
-        console.warn('WebSocket closed:', event);
-      };
-    return () => {
-      console.log('Cleaning up WebSocket');
-      if(socketRef.current){
-        socketRef.current.close();
+    useEffect(() => {
+        // Fetch initial data
+        async function populateData() {
+            try {
+                const response = await axios.get('http://10.14.82.102:80/allBuild');
+                setBuilds(response.data.data);
+            } catch (error) {
+                console.error('Error fetching initial data:', error);
+            }
+        }
+        populateData();
+
+        // Connect WebSocket
+        connectWebSocket();
+
+        return () => {
+            console.log('Cleaning up WebSocket');
+            if (socketRef.current) {
+                socketRef.current.close();
+            }
+            clearInterval(reconnectInterval.current);
+        };
+    }, []);
+
+	
+    if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+        return <div>Socket Connection Establishing...</div>;
+    }
+    const getStatusClass = (status) => {
+      switch (status?.toLowerCase()) {
+          case 'build running':
+          case 'build re-running':
+          case 'build rerunning':
+          case 'build waiting':
+              return 'status-blue';
+          case 'build failed':
+              return 'status-red';
+          case 'build completed':
+              return 'status-green';
+          default:
+              return 'status-yellow';
       }
     };
-  }, []);
-  if(!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
-    return <div> socket Connection establishing.....</div>
-  }
-
-  const getStatusClass = (status) => {
-    switch (status?.toLowerCase()) {
-        case 'build running':
-        case 'build re-running':
-        case 'build rerunning':
-        case 'build waiting':
-            return 'status-blue';
-        case 'build failed':
-            return 'status-red';
-        case 'build completed':
-            return 'status-green';
-        default:
-            return 'status-yellow';
-    }
+  
+    const createJiraLinks = (text) => {
+      if (!text) return text;
+      const regex = /(WA-\d{6})/g; // Matches WA- followed by 6 digits
+      return text.split(regex).map((part, index) => {
+          if (regex.test(part)) {
+              const jiraUrl = `https://hclsw-jiracentral.atlassian.net/browse/${part}`;
+              return (
+                  <a
+                      key={index}
+                      href={jiraUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: 'blue', textDecoration: 'underline' }}
+                  >
+                      {part}
+                  </a>
+              );
+          }
+          return part;
+      });
   };
-
-  const createJiraLinks = (text) => {
-    if (!text) return text;
-    const regex = /(WA-\d{6})/g; // Matches WA- followed by 6 digits
-    return text.split(regex).map((part, index) => {
-        if (regex.test(part)) {
-            const jiraUrl = `https://hclsw-jiracentral.atlassian.net/browse/${part}`;
-            return (
-                <a
-                    key={index}
-                    href={jiraUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: 'blue', textDecoration: 'underline' }}
-                >
-                    {part}
-                </a>
-            );
-        }
-        return part;
+  
+    const maestroBuilds = builds.filter((build) => {
+      const name = build.name.toLowerCase();
+      return (
+          name.includes("maestro") ||
+          /\bstable_f\b/.test(name)
+      )
     });
-};
-
-  const maestroBuilds = builds.filter((build) => {
-    const name = build.name.toLowerCase();
-    return (
-        name.includes("maestro") ||
-        /\bstable_f\b/.test(name)
-    )
+  
+    const l3Builds = builds.filter((build) =>
+      build.name.toLowerCase().includes("l3") || build.name.toLowerCase().includes("950") // L3 and 950 builds
+    );
+    const tenTwoBuilds = builds.filter((build) => {
+      const name = build.name.toLowerCase();
+      const isTenTwo = name.includes("10.2") || /\bstable_dev\b/.test(name) || name.includes("plugins");
+      
+      const isAlreadyCategorized =
+        maestroBuilds.some((maestroBuild) => maestroBuild.id === build.id) ||
+        l3Builds.some((l3Build) => l3Build.id === build.id);
+  
+      return isTenTwo && !isAlreadyCategorized;
   });
-
-  const l3Builds = builds.filter((build) =>
-    build.name.toLowerCase().includes("l3") || build.name.toLowerCase().includes("950") // L3 and 950 builds
-  );
-  const tenTwoBuilds = builds.filter((build) => {
-    const name = build.name.toLowerCase();
-    const isTenTwo = name.includes("10.2") || /\bstable_dev\b/.test(name) || name.includes("plugins");
-    
-    const isAlreadyCategorized =
-      maestroBuilds.some((maestroBuild) => maestroBuild.id === build.id) ||
-      l3Builds.some((l3Build) => l3Build.id === build.id);
-
-    return isTenTwo && !isAlreadyCategorized;
-});
 
   return (
     <div style={{ margin: "20px", overflowX: "auto" }}>
@@ -124,7 +148,7 @@ const Dashboard = () => {
           <tr>
             <th>10.2.4 BUILDS (code branch)</th>
             <th>Contents</th>
-            <th>Build Start Time</th>
+            <th>Build Start Time(Your Local Time Zone)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -154,7 +178,7 @@ const Dashboard = () => {
         <tr>
             <th>L3 BUILDS (code branch)</th>
             <th>Contents</th>
-            <th>Build Start Time</th>
+            <th>Build Start Time(Your Local Time Zone)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -184,7 +208,7 @@ const Dashboard = () => {
           <tr>
             <th>Maestro Builds</th>
             <th>Contents</th>
-            <th>Build Start Time</th>
+            <th>Build Start Time(Your Local Time Zone)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
