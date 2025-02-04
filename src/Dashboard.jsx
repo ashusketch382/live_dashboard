@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-
+import './Dashboard.css'
 const Dashboard = () => {
     const socketRef = useRef(null);
     const [builds, setBuilds] = useState([]);
