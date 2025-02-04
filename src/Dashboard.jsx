@@ -7,49 +7,43 @@ const Dashboard = () => {
     const reconnectInterval = useRef(null);
 
     const connectWebSocket = () => {
-        if (socketRef.current) {
-            socketRef.current.close(); // Ensure no duplicate connection
-        }
-
-        socketRef.current = new WebSocket('ws://10.14.82.102:80');
-
-        socketRef.current.onopen = () => {
-            console.log('WebSocket connection established');
-            clearInterval(reconnectInterval.current); // Stop reconnecting if successful
-        };
-
-        socketRef.current.onmessage = (event) => {
-            console.log('Message received:', event.data);
-            const updatedBuild = JSON.parse(event.data);
-            setBuilds((prevBuilds) => {
-                const index = prevBuilds.findIndex((b) => b.id === updatedBuild.id);
-                if (index !== -1) {
-                    const newBuilds = [...prevBuilds];
-                    newBuilds[index] = updatedBuild;
-                    return newBuilds;
-                }
-                return [...prevBuilds, updatedBuild];
-            });
-        };
-
-        socketRef.current.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
-
-        socketRef.current.onclose = (event) => {
-            console.warn('WebSocket closed:', event);
-
-            if (!event.wasClean) {
-                console.log('Attempting to reconnect WebSocket in 5 seconds...');
-                if (!reconnectInterval.current) {
-                    reconnectInterval.current = setInterval(() => {
-                        console.log('Reconnecting WebSocket...');
-                        connectWebSocket();
-                    }, 1);
-                }
-            }
-        };
-    };
+      if (socketRef.current) {
+          socketRef.current.close(); // Ensure no duplicate connection
+      }
+  
+      socketRef.current = new WebSocket('ws://10.14.82.102:80');
+  
+      socketRef.current.onopen = () => {
+          console.log('WebSocket connection established');
+      };
+  
+      socketRef.current.onmessage = (event) => {
+          console.log('Message received:', event.data);
+          const updatedBuild = JSON.parse(event.data);
+          setBuilds((prevBuilds) => {
+              const index = prevBuilds.findIndex((b) => b.id === updatedBuild.id);
+              if (index !== -1) {
+                  const newBuilds = [...prevBuilds];
+                  newBuilds[index] = updatedBuild;
+                  return newBuilds;
+              }
+              return [...prevBuilds, updatedBuild];
+          });
+      };
+  
+      socketRef.current.onerror = (error) => {
+          console.error('WebSocket error:', error);
+      };
+  
+      socketRef.current.onclose = (event) => {
+          console.warn('WebSocket closed:', event);
+  
+          if (!event.wasClean) {
+              console.log('Reconnecting WebSocket immediately...');
+              connectWebSocket();
+          }
+      };
+  };
 
     useEffect(() => {
         // Fetch initial data
