@@ -142,7 +142,7 @@ const Dashboard = () => {
           <tr>
             <th>10.2.4 BUILDS (code branch)</th>
             <th>Contents</th>
-            <th>Build Start Time(Your Local Time Zone)</th>
+            <th>Build Start Time(Local Time)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -172,7 +172,7 @@ const Dashboard = () => {
         <tr>
             <th>L3 BUILDS (code branch)</th>
             <th>Contents</th>
-            <th>Build Start Time(Your Local Time Zone)</th>
+            <th>Build Start Time(Local Time)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -202,7 +202,7 @@ const Dashboard = () => {
           <tr>
             <th>Maestro Builds</th>
             <th>Contents</th>
-            <th>Build Start Time(Your Local Time Zone)</th>
+            <th>Build Start Time(Local Time)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
