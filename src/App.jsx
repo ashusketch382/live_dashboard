@@ -22,7 +22,7 @@ function App() {
       <br></br>
       Made with <span style={{ color: 'red' }}>❤️</span> by Build Team
       <br></br>
-      For any feedback, pelase reach out to hwa_buildteam@hcl-software.com
+      For any feedback, please reach out to <a href="mailto:hwa_buildteam@hcl-software.com">hwa_buildteam@hcl-software.com</a>.
     </footer>
   </>)
 }
