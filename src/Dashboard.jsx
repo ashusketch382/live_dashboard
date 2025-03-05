@@ -83,6 +83,7 @@ const Dashboard = () => {
           case 'build failed':
               return 'status-red';
           case 'build completed':
+          case 'build completed and puhsed':
               return 'status-green';
           default:
               return 'status-yellow';
@@ -111,16 +112,18 @@ const Dashboard = () => {
       });
   };
   
+  const docBuilds = builds.filter((build) => {
+    return build.name.toUpperCase().startsWith("DOC");
+  });
     const maestroBuilds = builds.filter((build) => {
       const name = build.name.toLowerCase();
       return (
-          name.includes("maestro") ||
-          /\bstable_f\b/.test(name)
-      )
+          (name.includes("maestro") || /\bstable_f\b/.test(name)) && !docBuilds.some((docBuild) => docBuild.id === build.id)
+      );
     });
   
     const l3Builds = builds.filter((build) =>
-      build.name.toLowerCase().includes("l3") || build.name.toLowerCase().includes("950") // L3 and 950 builds
+      (build.name.toLowerCase().includes("l3") || build.name.toLowerCase().includes("950")) && !docBuilds.some((docBuild) => docBuild.id === build.id) // L3 and 950 builds
     );
     const tenTwoBuilds = builds.filter((build) => {
       const name = build.name.toLowerCase();
@@ -128,7 +131,7 @@ const Dashboard = () => {
       
       const isAlreadyCategorized =
         maestroBuilds.some((maestroBuild) => maestroBuild.id === build.id) ||
-        l3Builds.some((l3Build) => l3Build.id === build.id);
+        l3Builds.some((l3Build) => l3Build.id === build.id) || docBuilds.some((docBuild) => docBuild.id === build.id);
   
       return isTenTwo && !isAlreadyCategorized;
   });
@@ -220,7 +223,35 @@ const Dashboard = () => {
             </tr>
           ))}
         </tbody>
-
+        {/*DOC Builds */}
+        <thead style={{ backgroundColor: "#d4e7ff"}}>
+          <tr>
+            <th>DOC BUILDS (code branch)</th>
+            <th>Output Repository</th>
+            <th>Build Start Time(Local Time)</th>
+            <th>Status</th>
+            <th></th>
+            <th>Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          {docBuilds.map((build) => (
+            <tr key={build.id}>
+              <td>{build.name.replace(/\(/, ' (')}</td>
+              {build.content.startsWith("https://github01.hclpnp.com/WA-Dev") ? (
+                <a href={build.content} target="_blank" rel="noopener noreferrer">
+                  {build.content}
+                </a>
+                ) : (
+                  build.content
+                )}
+              <td>{new Date(build.buildStartTime).toLocaleString()}</td>
+              <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
+              <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
+              <td>{createJiraLinks(build.comments)}</td>
+            </tr>
+          ))}
+</tbody>
       </table>
       <br></br>
       <h4>Note: And here is some info about harbor tags and nfs paths for builds And sharing some paths for old/released packages/versions in the <a href='https://hclo365-my.sharepoint.com/:x:/r/personal/ashutoshsi_hcl_com1/_layouts/15/doc2.aspx?sourcedoc=%7BD1501DDE-ADAE-47E6-B61C-983731460A22%7D&file=Book.xlsx&action=editnew&mobileredirect=true&wdNewAndOpenCt=1695649194272&ct=1695649195167&wdPreviousSession=9632b2ad-526d-43a4-99df-9c2055c2c796&wdOrigin=OFFICECOM-WEB.START.NEW&cid=db85782f-0f36-40d5-a68f-2fcc722ce739&wdPreviousSessionSrc=HarmonyWeb' target='_blank'>NFS PATHS EXCEL</a></h4>
