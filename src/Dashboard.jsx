@@ -223,14 +223,21 @@ const Dashboard = () => {
             </tr>
           ))}
         </tbody>
+
+        <thead>
+            <tr>
+                <th colSpan="6" style={{ backgroundColor: "transparent", height: "25px" }}></th>
+            </tr>
+        </thead>
+
         {/*DOC Builds */}
         <thead style={{ backgroundColor: "#d4e7ff"}}>
           <tr>
             <th>DOC BUILDS (code branch)</th>
             <th>Output Repository</th>
             <th>Build Start Time(Local Time)</th>
-            <th>Status</th>
             <th></th>
+            <th>Status</th>
             <th>Comments</th>
           </tr>
         </thead>
