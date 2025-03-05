@@ -83,7 +83,7 @@ const Dashboard = () => {
           case 'build failed':
               return 'status-red';
           case 'build completed':
-          case 'build completed and puhsed':
+          case 'build completed and pushed':
               return 'status-green';
           default:
               return 'status-yellow';
