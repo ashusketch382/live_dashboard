@@ -117,24 +117,27 @@ const Dashboard = () => {
     });
     const ZOS_Builds = builds.filter((build) => {
       return build.name.toUpperCase().startsWith("ZOS");
-    })
+    });
+    const pluginBuilds = builds.filter((build) => {
+      return build.name.toUpperCase().startsWith("PLUGINS");
+    });
     const maestroBuilds = builds.filter((build) => {
       const name = build.name.toLowerCase();
       return (
-          (name.includes("maestro") || /\bstable_f\b/.test(name)) && !docBuilds.some((docBuild) => docBuild.id === build.id) && !ZOS_Builds.some((ZOS_Build) => ZOS_Build.id === build.id)
+          (name.includes("maestro") || /\bstable_f\b/.test(name)) && !docBuilds.some((docBuild) => docBuild.id === build.id) && !ZOS_Builds.some((ZOS_Build) => ZOS_Build.id === build.id) && !pluginBuilds.some((pluginBuild) => pluginBuild.id === build.id)
       );
     });
   
     const l3Builds = builds.filter((build) =>
-      (build.name.toLowerCase().includes("l3") || build.name.toLowerCase().includes("950")) && !docBuilds.some((docBuild) => docBuild.id === build.id) && !ZOS_Builds.some((ZOS_Build) => ZOS_Build.id === build.id) // L3 and 950 builds
+      (build.name.toLowerCase().includes("l3") || build.name.toLowerCase().includes("950")) && !docBuilds.some((docBuild) => docBuild.id === build.id) && !ZOS_Builds.some((ZOS_Build) => ZOS_Build.id === build.id) && !pluginBuilds.some((pluginBuild) => pluginBuild.id === build.id) // L3 and 950 builds
     );
     const tenTwoBuilds = builds.filter((build) => {
       const name = build.name.toLowerCase();
-      const isTenTwo = name.includes("10.2") || /\bstable_dev\b/.test(name) || name.includes("plugins");
+      const isTenTwo = name.includes("10.2") || /\bstable_dev\b/.test(name);
       
       const isAlreadyCategorized =
         maestroBuilds.some((maestroBuild) => maestroBuild.id === build.id) ||
-        l3Builds.some((l3Build) => l3Build.id === build.id) || docBuilds.some((docBuild) => docBuild.id === build.id) || ZOS_Builds.some((ZOS_Build) => ZOS_Build.id === build.id);
+        l3Builds.some((l3Build) => l3Build.id === build.id) || docBuilds.some((docBuild) => docBuild.id === build.id) || ZOS_Builds.some((ZOS_Build) => ZOS_Build.id === build.id) || pluginBuilds.some((pluginBuild) => pluginBuild.id === build.id);
   
       return isTenTwo && !isAlreadyCategorized;
   });
@@ -168,6 +171,12 @@ const Dashboard = () => {
         </tbody>
 
         <thead>
+            <tr>
+                <th colSpan="6" style={{ backgroundColor: "transparent", height: "25px" }}></th>
+            </tr>
+        </thead>
+
+        <thead>
           <tr>
             <th>ZOS BUILDS (code branch)</th>
             <th>Contents</th>
@@ -179,6 +188,35 @@ const Dashboard = () => {
         </thead>
         <tbody>
           {ZOS_Builds.map((build) => (
+            <tr key={build.id}>
+              <td>{build.name.replace(/\(/, ' (')}</td>
+              <td>{build.content}</td>
+              <td>{new Date(build.buildStartTime).toLocaleString()}</td>
+              <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
+              <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
+              <td>{createJiraLinks(build.comments)}</td>
+            </tr>
+          ))}
+        </tbody>
+
+        <thead>
+            <tr>
+                <th colSpan="6" style={{ backgroundColor: "transparent", height: "25px" }}></th>
+            </tr>
+        </thead>
+
+        <thead>
+          <tr>
+            <th>ZOS BUILDS (code branch)</th>
+            <th>Contents</th>
+            <th>Build Start Time(Local)</th>
+            <th>On-Prem Status</th>
+            <th>Docker Status</th>
+            <th>Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          {pluginBuilds.map((build) => (
             <tr key={build.id}>
               <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
