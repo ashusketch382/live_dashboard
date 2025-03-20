@@ -129,7 +129,7 @@ const Dashboard = () => {
     });
   
     const l3Builds = builds.filter((build) =>
-      (build.name.toLowerCase().includes("l3") || build.name.toLowerCase().includes("950")) && !docBuilds.some((docBuild) => docBuild.id === build.id) && !ZOS_Builds.some((ZOS_Build) => ZOS_Build.id === build.id) && !pluginBuilds.some((pluginBuild) => pluginBuild.id === build.id) // L3 and 950 builds
+      (build.name.toLowerCase().includes("l3") || build.name.toLowerCase().includes("950") || build.name.toLowerCase().includes("saas")) && !docBuilds.some((docBuild) => docBuild.id === build.id) && !ZOS_Builds.some((ZOS_Build) => ZOS_Build.id === build.id) && !pluginBuilds.some((pluginBuild) => pluginBuild.id === build.id) // L3 and 950 builds
     );
     const tenTwoBuilds = builds.filter((build) => {
       const name = build.name.toLowerCase();
@@ -207,7 +207,7 @@ const Dashboard = () => {
 
         <thead>
           <tr>
-            <th>ZOS BUILDS (code branch)</th>
+            <th>Plugin Builds (code branch)</th>
             <th>Contents</th>
             <th>Build Start Time(Local)</th>
             <th>On-Prem Status</th>
