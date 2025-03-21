@@ -149,7 +149,7 @@ const Dashboard = () => {
         {/* 102 / 10.2 Builds */}
         <thead>
           <tr>
-            <th>10.2.4 BUILDS (code branch)</th>
+            <th>Development Builds</th>
             <th>Contents</th>
             <th>Build Start Time(Local)</th>
             <th>On-Prem Status</th>
