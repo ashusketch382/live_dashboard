@@ -152,6 +152,7 @@ const Dashboard = () => {
             <th>Development Builds</th>
             <th>Contents</th>
             <th>Build Start Time(Local)</th>
+            <th>Build End Time(Local)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -163,6 +164,7 @@ const Dashboard = () => {
               <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
               <td>{new Date(build.buildStartTime).toLocaleString()}</td>
+              <td>{new Date(build.buildEndTime).toLocaleString()}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
               <td>{createJiraLinks(build.comments)}</td>
@@ -181,6 +183,7 @@ const Dashboard = () => {
             <th>ZOS BUILDS (code branch)</th>
             <th>Contents</th>
             <th>Build Start Time(Local)</th>
+            <th>Build End Time(Local)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -192,6 +195,7 @@ const Dashboard = () => {
               <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
               <td>{new Date(build.buildStartTime).toLocaleString()}</td>
+              <td>{new Date(build.buildEndTime).toLocaleString()}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
               <td>{createJiraLinks(build.comments)}</td>
@@ -210,6 +214,7 @@ const Dashboard = () => {
             <th>Plugin Builds (code branch)</th>
             <th>Contents</th>
             <th>Build Start Time(Local)</th>
+            <th>Build End Time(Local)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -221,6 +226,7 @@ const Dashboard = () => {
               <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
               <td>{new Date(build.buildStartTime).toLocaleString()}</td>
+              <td>{new Date(build.buildEndTime).toLocaleString()}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
               <td>{createJiraLinks(build.comments)}</td>
@@ -240,6 +246,7 @@ const Dashboard = () => {
             <th>L3 BUILDS (code branch)</th>
             <th>Contents</th>
             <th>Build Start Time(Local)</th>
+            <th>Build End Time(Local)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -251,6 +258,7 @@ const Dashboard = () => {
               <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
               <td>{new Date(build.buildStartTime).toLocaleString()}</td>
+              <td>{new Date(build.buildEndTime).toLocaleString()}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
               <td>{createJiraLinks(build.comments)}</td>
@@ -270,6 +278,7 @@ const Dashboard = () => {
             <th>Maestro Builds</th>
             <th>Contents</th>
             <th>Build Start Time(Local)</th>
+            <th>Build End Time(Local)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -281,6 +290,7 @@ const Dashboard = () => {
               <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
               <td>{new Date(build.buildStartTime).toLocaleString()}</td>
+              <td>{new Date(build.buildEndTime).toLocaleString()}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
               <td>{createJiraLinks(build.comments)}</td>
@@ -300,6 +310,7 @@ const Dashboard = () => {
             <th>DOC BUILDS (code branch)</th>
             <th>Output Repository</th>
             <th>Build Start Time(Local)</th>
+            <th>Build End Time(Local)</th>
             <th></th>
             <th>Status</th>
             <th>Comments</th>
@@ -317,6 +328,7 @@ const Dashboard = () => {
                   build.content
                 )}
               <td>{new Date(build.buildStartTime).toLocaleString()}</td>
+              <td>{new Date(build.buildEndTime).toLocaleString()}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
               <td>{createJiraLinks(build.comments)}</td>
