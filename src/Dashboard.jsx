@@ -6,6 +6,10 @@ const Dashboard = () => {
     const [builds, setBuilds] = useState([]);
     const reconnectInterval = useRef(null);
 
+    function formatDateOrEmpty(date) {
+      return date.getTime() === 0 ? "" : date.toLocaleString();
+    }
+    
     const connectWebSocket = () => {
       if (socketRef.current) {
           socketRef.current.close(); // Ensure no duplicate connection
@@ -163,8 +167,8 @@ const Dashboard = () => {
             <tr key={build.id}>
               <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
-              <td>{new Date(build.buildStartTime).toLocaleString()}</td>
-              <td>{new Date(build.buildEndTime).toLocaleString()}</td>
+              <td>{formatDateOrEmpty(new Date(build.buildStartTime))}</td>
+              <td>{formatDateOrEmpty(new Date(build.buildEndTime))}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
               <td>{createJiraLinks(build.comments)}</td>
@@ -194,8 +198,8 @@ const Dashboard = () => {
             <tr key={build.id}>
               <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
-              <td>{new Date(build.buildStartTime).toLocaleString()}</td>
-              <td>{new Date(build.buildEndTime).toLocaleString()}</td>
+              <td>{formatDateOrEmpty(new Date(build.buildStartTime))}</td>
+              <td>{formatDateOrEmpty(new Date(build.buildEndTime))}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
               <td>{createJiraLinks(build.comments)}</td>
@@ -225,8 +229,8 @@ const Dashboard = () => {
             <tr key={build.id}>
               <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
-              <td>{new Date(build.buildStartTime).toLocaleString()}</td>
-              <td>{new Date(build.buildEndTime).toLocaleString()}</td>
+              <td>{formatDateOrEmpty(new Date(build.buildStartTime))}</td>
+              <td>{formatDateOrEmpty(new Date(build.buildEndTime))}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
               <td>{createJiraLinks(build.comments)}</td>
@@ -257,8 +261,8 @@ const Dashboard = () => {
             <tr key={build.id}>
               <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
-              <td>{new Date(build.buildStartTime).toLocaleString()}</td>
-              <td>{new Date(build.buildEndTime).toLocaleString()}</td>
+              <td>{formatDateOrEmpty(new Date(build.buildStartTime))}</td>
+              <td>{formatDateOrEmpty(new Date(build.buildEndTime))}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
               <td>{createJiraLinks(build.comments)}</td>
@@ -289,8 +293,8 @@ const Dashboard = () => {
             <tr key={build.id}>
               <td>{build.name.replace(/\(/, ' (')}</td>
               <td>{build.content}</td>
-              <td>{new Date(build.buildStartTime).toLocaleString()}</td>
-              <td>{new Date(build.buildEndTime).toLocaleString()}</td>
+              <td>{formatDateOrEmpty(new Date(build.buildStartTime))}</td>
+              <td>{formatDateOrEmpty(new Date(build.buildEndTime))}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
               <td>{createJiraLinks(build.comments)}</td>
@@ -327,8 +331,8 @@ const Dashboard = () => {
                 ) : (
                   build.content
                 )}
-              <td>{new Date(build.buildStartTime).toLocaleString()}</td>
-              <td>{new Date(build.buildEndTime).toLocaleString()}</td>
+              <td>{formatDateOrEmpty(new Date(build.buildStartTime))}</td>
+              <td>{formatDateOrEmpty(new Date(build.buildEndTime))}</td>
               <td className={getStatusClass(build.onpremStatus)}>{build.onpremStatus}</td>
               <td className={getStatusClass(build.dockerStatus)}>{build.dockerStatus}</td>
               <td>{createJiraLinks(build.comments)}</td>
