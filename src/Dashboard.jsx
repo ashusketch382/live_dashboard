@@ -7,7 +7,10 @@ const Dashboard = () => {
     const reconnectInterval = useRef(null);
 
     function formatDateOrEmpty(date) {
-      return date.getTime() === 0 ? "" : date.toLocaleString();
+      return date.getTime() === 0 ? "" : date.toLocaleString('en-GB', { 
+        timeZone: 'Europe/Paris',
+        hour12: true
+      });
     }
     
     const connectWebSocket = () => {
@@ -155,8 +158,8 @@ const Dashboard = () => {
           <tr>
             <th>Development Builds</th>
             <th>Contents</th>
-            <th>Build Start Time(Local)</th>
-            <th>Build End Time(Local)</th>
+            <th>Build Start Time(CET)</th>
+            <th>Build End Time(CET)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -186,8 +189,8 @@ const Dashboard = () => {
           <tr>
             <th>ZOS BUILDS (code branch)</th>
             <th>Contents</th>
-            <th>Build Start Time(Local)</th>
-            <th>Build End Time(Local)</th>
+            <th>Build Start Time(CET)</th>
+            <th>Build End Time(CET)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -217,8 +220,8 @@ const Dashboard = () => {
           <tr>
             <th>Plugin Builds (code branch)</th>
             <th>Contents</th>
-            <th>Build Start Time(Local)</th>
-            <th>Build End Time(Local)</th>
+            <th>Build Start Time(CET)</th>
+            <th>Build End Time(CET)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -249,8 +252,8 @@ const Dashboard = () => {
         <tr>
             <th>L3 BUILDS (code branch)</th>
             <th>Contents</th>
-            <th>Build Start Time(Local)</th>
-            <th>Build End Time(Local)</th>
+            <th>Build Start Time(CET)</th>
+            <th>Build End Time(CET)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -281,8 +284,8 @@ const Dashboard = () => {
           <tr>
             <th>Maestro Builds</th>
             <th>Contents</th>
-            <th>Build Start Time(Local)</th>
-            <th>Build End Time(Local)</th>
+            <th>Build Start Time(CET)</th>
+            <th>Build End Time(CET)</th>
             <th>On-Prem Status</th>
             <th>Docker Status</th>
             <th>Comments</th>
@@ -313,8 +316,8 @@ const Dashboard = () => {
           <tr>
             <th>DOC BUILDS (code branch)</th>
             <th>Output Repository</th>
-            <th>Build Start Time(Local)</th>
-            <th>Build End Time(Local)</th>
+            <th>Build Start Time(CET)</th>
+            <th>Build End Time(CET)</th>
             <th></th>
             <th>Status</th>
             <th>Comments</th>
