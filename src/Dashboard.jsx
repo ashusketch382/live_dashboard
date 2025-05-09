@@ -1,11 +1,46 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './Dashboard.css'
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 const Dashboard = () => {
     const socketRef = useRef(null);
     const [builds, setBuilds] = useState([]);
     const reconnectInterval = useRef(null);
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const handleDateChange = (date) => {
+      setSelectedDate(date);
+    };
+    
+    const fetchSnapshots = async () => {
+      try {
+        const adjustedDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
+        const dateString = adjustedDate.toISOString().split('T')[0];
+        const today = new Date();
 
+        const year = today.getUTCFullYear();
+        const month = String(today.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day = String(today.getUTCDate()).padStart(2, '0');
+        const todayDateString = `${year}-${month}-${day}`;
+        console.log(todayDateString);
+        if(dateString.startsWith(todayDateString)){
+          populateData();
+        }
+        else{ 
+          const response = await axios.get('http://localhost:3000/snapshots', {
+            params: {
+            date: dateString
+          },
+        });
+        setBuilds(response.data.data);
+        console.log(response.data.data);
+      }
+      } catch (error) {
+        console.error('Error fetching snapshots:', error);
+      }
+    };
+  
     function formatDateOrEmpty(date) {
       return date.getTime() === 0 ? "" : date.toLocaleString('en-GB', { 
         timeZone: 'Europe/Paris',
@@ -18,7 +53,7 @@ const Dashboard = () => {
           socketRef.current.close(); // Ensure no duplicate connection
       }
   
-      socketRef.current = new WebSocket('ws://10.14.82.102:80');
+      socketRef.current = new WebSocket('ws://localhost:3000');
   
       socketRef.current.onopen = () => {
           console.log('WebSocket connection established');
@@ -50,18 +85,18 @@ const Dashboard = () => {
               connectWebSocket();
           }
       };
-  };
+    };
 
+    async function populateData() {
+      try {
+        const response = await axios.get('http://localhost:3000/allBuild');
+        setBuilds(response.data.data);
+      } catch (error) {
+        console.error('Error fetching initial data:', error);
+      }
+    }
     useEffect(() => {
         // Fetch initial data
-        async function populateData() {
-            try {
-                const response = await axios.get('http://10.14.82.102:80/allBuild');
-                setBuilds(response.data.data);
-            } catch (error) {
-                console.error('Error fetching initial data:', error);
-            }
-        }
         populateData();
 
         // Connect WebSocket
@@ -345,6 +380,16 @@ const Dashboard = () => {
       </table>
       <br></br>
       <h4>Note: And here is some info about harbor tags and nfs paths for builds And sharing some paths for old/released packages/versions in the <a href='https://hclo365-my.sharepoint.com/:x:/r/personal/ashutoshsi_hcl_com1/_layouts/15/doc2.aspx?sourcedoc=%7BD1501DDE-ADAE-47E6-B61C-983731460A22%7D&file=Book.xlsx&action=editnew&mobileredirect=true&wdNewAndOpenCt=1695649194272&ct=1695649195167&wdPreviousSession=9632b2ad-526d-43a4-99df-9c2055c2c796&wdOrigin=OFFICECOM-WEB.START.NEW&cid=db85782f-0f36-40d5-a68f-2fcc722ce739&wdPreviousSessionSrc=HarmonyWeb' target='_blank'>NFS PATHS EXCEL</a></h4>
+      <div className='flex flex-col items-center space-y-4 p-4'>
+        <DatePicker
+        selected={selectedDate}
+        onChange={handleDateChange}
+        maxDate={new Date()}
+        minDate={new Date(new Date().setDate(new Date().getDate() - 90))}
+        className="border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button onClick={fetchSnapshots} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Time Travel</button>
+      </div>
     </div>
   );
 };
