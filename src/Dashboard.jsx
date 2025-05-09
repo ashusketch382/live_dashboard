@@ -28,7 +28,7 @@ const Dashboard = () => {
           populateData();
         }
         else{ 
-          const response = await axios.get('http://localhost:3000/snapshots', {
+          const response = await axios.get('http://10.14.82.102/snapshots', {
             params: {
             date: dateString
           },
@@ -53,7 +53,7 @@ const Dashboard = () => {
           socketRef.current.close(); // Ensure no duplicate connection
       }
   
-      socketRef.current = new WebSocket('ws://localhost:3000');
+      socketRef.current = new WebSocket('ws://10.14.82.102:80');
   
       socketRef.current.onopen = () => {
           console.log('WebSocket connection established');
@@ -89,7 +89,7 @@ const Dashboard = () => {
 
     async function populateData() {
       try {
-        const response = await axios.get('http://localhost:3000/allBuild');
+        const response = await axios.get('http://10.14.82.102:80/allBuild');
         setBuilds(response.data.data);
       } catch (error) {
         console.error('Error fetching initial data:', error);
